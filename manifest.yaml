@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Plugin
+metadata:
+  author: RockChinQ
+  name: DailyLimitPlugin
+  repository: 'https://github.com/langbot-app/DailyLimitPlugin'
+  version: 0.1.0
+  description:
+    en_US: 'Limit the number of conversations per user per day'
+    zh_Hans: '按用户限制每天的对话次数'
+    ja_JP: 'ユーザーごとの1日あたりの会話回数を制限する'
+  label:
+    en_US: Daily Limit
+    zh_Hans: 每日对话限制
+    ja_JP: 日次制限
+  icon: assets/icon.svg
+spec:
+  config:
+    - name: daily_limit
+      type: integer
+      label:
+        en_US: Daily Limit Per User
+        zh_Hans: 每个用户每天的对话次数上限
+        ja_JP: ユーザーあたりの1日の会話回数上限
+      description:
+        en_US: 'Maximum number of conversations allowed per user per day. Set to 0 to disable the limit.'
+        zh_Hans: '每个用户每天允许的最大对话次数。设为 0 则不限制。'
+        ja_JP: 'ユーザーあたりの1日の最大会話回数。0に設定すると無制限。'
+      default: 50
+      required: true
+    - name: limit_message
+      type: string
+      label:
+        en_US: Limit Reached Message
+        zh_Hans: 超出限制时的提示语
+        ja_JP: 制限到達時のメッセージ
+      description:
+        en_US: 'Message shown when a user exceeds the daily limit. Leave empty to use the default message.'
+        zh_Hans: '用户超出每日限制时显示的提示。留空则使用默认提示。'
+        ja_JP: 'ユーザーが日次制限を超えた場合に表示されるメッセージ。空の場合はデフォルト。'
+      default: '您今天的对话次数已达上限，请明天再来吧~'
+      required: false
+    - name: silent_mode
+      type: boolean
+      label:
+        en_US: Silent Mode
+        zh_Hans: 静默模式
+        ja_JP: サイレントモード
+      description:
+        en_US: 'When enabled, messages exceeding the limit will be silently discarded without any reply.'
+        zh_Hans: '开启后，超出限制的消息将被静默丢弃，不会回复任何提示。'
+        ja_JP: '有効にすると、制限を超えたメッセージは返信なしで静かに破棄されます。'
+      default: false
+      required: false
+  components:
+    EventListener:
+      - path: components/event_listener/default.yaml
+execution:
+  python:
+    path: main.py
+    attr: DailyLimitPlugin
