@@ -54,7 +54,8 @@ spec:
       required: false
   components:
     EventListener:
-      - path: components/event_listener/default.yaml
+      fromDirs:
+      - path: components/event_listener/
 execution:
   python:
     path: main.py
