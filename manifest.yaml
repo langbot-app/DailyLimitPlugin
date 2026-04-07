@@ -4,7 +4,7 @@ metadata:
   author: RockChinQ
   name: DailyLimitPlugin
   repository: 'https://github.com/langbot-app/DailyLimitPlugin'
-  version: 0.1.0
+  version: 0.2.0
   description:
     en_US: 'Limit the number of conversations per user per day'
     zh_Hans: '按用户限制每天的对话次数'
@@ -39,6 +39,30 @@ spec:
         zh_Hans: '用户超出每日限制时显示的提示。留空则使用默认提示。'
         ja_JP: 'ユーザーが日次制限を超えた場合に表示されるメッセージ。空の場合はデフォルト。'
       default: '您今天的对话次数已达上限，请明天再来吧~'
+      required: false
+    - name: reset_timezone_offset
+      type: integer
+      label:
+        en_US: Reset Timezone Offset (hours)
+        zh_Hans: 重置时区偏移（小时）
+        ja_JP: リセットタイムゾーンオフセット（時間）
+      description:
+        en_US: 'UTC offset in hours for daily reset. E.g. 8 for UTC+8 (China/Singapore), 9 for UTC+9 (Japan/Korea), -5 for UTC-5 (US Eastern).'
+        zh_Hans: '每日重置使用的 UTC 偏移小时数。例如：8 表示东八区（中国），9 表示东九区（日本），-5 表示西五区（美东）。'
+        ja_JP: '日次リセットに使用するUTCオフセット（時間）。例：8はUTC+8（中国）、9はUTC+9（日本）、-5はUTC-5（米国東部）。'
+      default: 8
+      required: false
+    - name: reset_hour
+      type: integer
+      label:
+        en_US: Reset Hour (0-23)
+        zh_Hans: 重置时间点（0-23时）
+        ja_JP: リセット時刻（0〜23時）
+      description:
+        en_US: 'Hour of the day (in the configured timezone) when the daily counter resets. Default is 0 (midnight).'
+        zh_Hans: '每天重置计数器的时间点（按配置的时区）。默认为 0 点（午夜）。'
+        ja_JP: '日次カウンターがリセットされる時刻（設定タイムゾーン基準）。デフォルトは0時（深夜）。'
+      default: 0
       required: false
     - name: silent_mode
       type: boolean

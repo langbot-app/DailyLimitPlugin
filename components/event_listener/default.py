@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import json
-import time
 from datetime import datetime, timezone, timedelta
 
 from langbot_plugin.api.definition.components.common.event_listener import EventListener
@@ -30,7 +28,19 @@ class DefaultEventListener(EventListener):
         if daily_limit <= 0:
             return
 
-        today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        # Calculate the current "day" based on configured timezone and reset hour
+        tz_offset = config.get("reset_timezone_offset", 8)
+        reset_hour = config.get("reset_hour", 0)
+        # Clamp values
+        tz_offset = max(-12, min(14, tz_offset))
+        reset_hour = max(0, min(23, reset_hour))
+
+        tz = timezone(timedelta(hours=tz_offset))
+        now_local = datetime.now(tz)
+        # If current hour < reset_hour, the "logical day" is still yesterday
+        if now_local.hour < reset_hour:
+            now_local -= timedelta(days=1)
+        today = now_local.strftime("%Y-%m-%d")
         storage_key = f"daily_count:{today}:{user_id}"
 
         # Get current count
@@ -62,7 +72,7 @@ class DefaultEventListener(EventListener):
         await self.plugin.set_plugin_storage(storage_key, str(count).encode("utf-8"))
 
         # Cleanup: delete previous day's keys to avoid storage bloat
-        yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime("%Y-%m-%d")
+        yesterday = (now_local - timedelta(days=1)).strftime("%Y-%m-%d")
         try:
             keys = await self.plugin.get_plugin_storage_keys()
             for key in keys:
