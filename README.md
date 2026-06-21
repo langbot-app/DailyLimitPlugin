@@ -1,5 +1,18 @@
 # Daily Limit Plugin
 
+> ⚠️ **This repository is archived and no longer maintained.**
+>
+> DailyLimitPlugin has been migrated to the new LangBot plugin SDK and now lives in the
+> **[langbot-plugin-demo](https://github.com/langbot-app/langbot-plugin-demo/tree/main/DailyLimitPlugin)** repository,
+> where it has been upgraded to be production-ready with a management Page (view/configure/reset
+> per-session limits). Please use that version.
+>
+> 此仓库已归档，不再维护。DailyLimitPlugin 已迁移至新版插件 SDK，现位于
+> **[langbot-plugin-demo](https://github.com/langbot-app/langbot-plugin-demo/tree/main/DailyLimitPlugin)** 仓库，
+> 并升级为带可视化管理页面的生产可用版本，请使用该版本。
+
+---
+
 Limit the number of conversations per user per day for LangBot.
 
 ## Features
@@ -9,22 +22,3 @@ Limit the number of conversations per user per day for LangBot.
 - **Silent mode**: Optionally discard messages silently without any reply when the limit is reached
 - **Timezone-aware reset**: Configure the timezone and hour for daily counter reset
 - **Automatic cleanup**: Old usage data is automatically cleaned up to prevent storage bloat
-
-## Configuration
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `daily_limit` | integer | `50` | Maximum conversations per user per day. Set to `0` to disable. |
-| `limit_message` | string | `您今天的对话次数已达上限，请明天再来吧~` | Message shown when limit is exceeded. |
-| `reset_timezone_offset` | integer | `8` | UTC offset in hours for daily reset. E.g. `8` for UTC+8 (China), `9` for UTC+9 (Japan). |
-| `reset_hour` | integer | `0` | Hour of the day (in configured timezone) when the counter resets. |
-| `silent_mode` | boolean | `false` | When enabled, excess messages are silently dropped. |
-
-## How It Works
-
-The plugin listens to both private and group normal message events. For each incoming message, it checks the sender's daily usage count against the configured limit. If the limit is reached:
-
-- **Silent mode off**: Replies with the configured limit message and blocks further processing.
-- **Silent mode on**: Silently blocks further processing without any reply.
-
-Usage counts reset at the configured hour in the configured timezone (default: midnight UTC+8).
